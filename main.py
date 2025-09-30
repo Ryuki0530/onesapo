@@ -70,7 +70,7 @@ class MainWindow(QtWidgets.QMainWindow):
         self.current_character = "Milltina"
 
         super().__init__()
-        self.setWindowTitle("Unity in Qt")
+        self.setWindowTitle("おねサポ - OneSapo")
 
         central = QtWidgets.QWidget(); self.setCentralWidget(central)
         h = QtWidgets.QHBoxLayout(central)
