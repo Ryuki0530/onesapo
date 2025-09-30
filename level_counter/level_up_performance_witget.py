@@ -4,23 +4,19 @@ QtKeep = QtCore.Qt.AspectRatioMode.KeepAspectRatio
 QtIgnore = QtCore.Qt.AspectRatioMode.IgnoreAspectRatio
 QtSmooth = QtCore.Qt.TransformationMode.SmoothTransformation
 
-from setting_menu.setting_menu_window import SettingMenuWindow
-from user_data_manager import ConfigData
+class LevelUpPerformanceWidget(QtWidgets.QWidget):
 
-class SettingMenuOpenButtonWidget(QtWidgets.QWidget):
-
-    def __init__(self, controller, voice_service, event_bus, config: ConfigData, parent=None):
+    def __init__(self, controller, voice_service, event_bus, parent=None):
         super().__init__(parent)
         self.ctrl = controller
         self.voice_service = voice_service
         self.event_bus = event_bus
-        self.config = config
 
         # --- UI ---
         #レイアウト背景のデザイン
         palette = self.palette()
         # 背景に画像を設定
-        self._bg_pix = QtGui.QPixmap()  # ウィジェットの背景画像パス
+        self._bg_pix = QtGui.QPixmap("./assets/level_counter/bg2.png")  # ウィジェットの背景画像パス
         self._bg_mode = "stretch_xy"   # "stretch_xy" | "contain" | "cover"
         self._bg_scale_x = 1.0         # 横の倍率（stretch_xy 用）
         self._bg_scale_y = 1.0         # 縦の倍率（stretch_xy 用）
@@ -28,32 +24,78 @@ class SettingMenuOpenButtonWidget(QtWidgets.QWidget):
 
         self.setAttribute(QtCore.Qt.WidgetAttribute.WA_TranslucentBackground, True)
         self.setAutoFillBackground(False)
-        self.resize(60, 60)  # 最小サイズを設定
+        self.resize(300, 150) # 最小サイズを設定
+        self.resize(0, 0)   # 初期状態は非表示
 
         # マスターレイアウト
         layout = QtWidgets.QVBoxLayout(self)
 
-        # 設定画面を開くボタン
-        self.open_button = QtWidgets.QPushButton("⚙")
-        self.open_button.setStyleSheet("font-size: 20pt; ")
-        layout.addWidget(self.open_button)
-        layout.addStretch(1)
+        """
+        ここに、ウィジェットのUI要素を追加。
+        """ 
+        # タイトルラベル
+        self.title_label = QtWidgets.QLabel("Friendship Level Up!")
+        self.title_label.setAlignment(QtCore.Qt.AlignmentFlag.AlignCenter)
+        self.title_label.setStyleSheet("""
+            color: #ffffff;
+            font-size: 13pt;
+            letter-spacing: 2px;
+            font-weight: bold;
+            background: rgba(0,0,0,0.3);
+            border-radius: 8px;
+            padding: 4px 0;
+        """)
+        layout.addWidget(self.title_label)
+
+        # 日数ラベル（大きく目立たせる）
+        self.level_label = QtWidgets.QLabel("0")
+        self.level_label.setAlignment(QtCore.Qt.AlignmentFlag.AlignCenter)
+        self.level_label.setStyleSheet("""
+            color: #ffeb3b;
+            font-size: 40pt;
+            font-weight: bold;
+        """)
+        layout.addWidget(self.level_label)
+
+        # サブラベル
+        self.sub_label = QtWidgets.QLabel("信頼度レベルUP！")
+        self.sub_label.setAlignment(QtCore.Qt.AlignmentFlag.AlignCenter)
+        self.sub_label.setStyleSheet("""
+            color: #ffffff;
+            font-size: 14pt;
+            background: rgba(0,0,0,0.2);
+            border-radius: 6px;
+            padding: 2px 0;
+        """)
+        layout.addWidget(self.sub_label)
+
+        layout.stretch(1)
+
+        # 10秒後に_update_consecutive_daysを呼び出すテスト用タイマー
+        # QtCore.QTimer.singleShot(10000, lambda: self._update_consecutive_days({"days": 5}))
+
 
         # --- 配線 ---
-        self.open_button.clicked.connect(self.on_button_clicked)
         """
         ここに、各ウィジェットのイベントを接続するコードを記述。
         """
+        self.event_bus.on("level_counter.level_up", self._level_up)
+
 
     """
     ここに、各種ロジックを記述。
     """
-    def on_button_clicked(self):
-        # VoiceService が保持している ConfigData を流用（同一インスタンスをUIに渡す）
-        dlg = SettingMenuWindow(config=self.config,event_bus=self.event_bus, parent=self)
-        dlg.exec()
-        # ここで必要なら設定変更後の反映処理を行う
-        # 例: self.ctrl への反映や event_bus 経由の通知など
+
+    def _level_up(self, level):
+        self.open(level["level"])
+        QtCore.QTimer.singleShot(5000, self.close)
+
+    def open(self, level):
+        self.level_label.setText(f"Lv.{level}")
+        self.resize(300, 150)
+
+    def close(self):
+        self.resize(0, 0)
 
     def paintEvent(self, e):
         super().paintEvent(e)

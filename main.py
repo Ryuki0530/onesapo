@@ -26,6 +26,10 @@ from sleep_checker.sleep_checker_widget import SleepCheckerWidget
 from game_process_checker.game_process_checker_widget import GameProcessCheckerWidget
 from level_counter.level_counter_widget import LevelCounterWidget
 from level_counter.consecutive_record_performance_witget import ConsecutiveRecordPerformanceWidget
+from level_counter.level_up_performance_witget import LevelUpPerformanceWidget
+from movie.movie_menu_button import MovieMenuOpenButtonWidget
+from movie.movie_menu import MovieMenuWidget
+from movie.movie_unlocked_reminder_witget import MovieUnlockedReminderWidget
 
 
 class NullUnityController(QtCore.QObject):
@@ -109,8 +113,9 @@ class MainWindow(QtWidgets.QMainWindow):
         self.voice_service.set_current_character(self.current_character)
 
         # 右: 仮のツール置き場
-        right = QtWidgets.QWidget(); v = QtWidgets.QVBoxLayout(right)
-        h.addWidget(right)
+        if DEBUG:
+            right = QtWidgets.QWidget(); v = QtWidgets.QVBoxLayout(right)
+            h.addWidget(right)
 
         # 設定メニューを開くボタン
         self.setting_menu_button = SettingMenuOpenButtonWidget(self.controller, self.voice_service, self.bus, self.config)
@@ -146,10 +151,31 @@ class MainWindow(QtWidgets.QMainWindow):
         self.overlay.add_overlay_widget(self.level_counter_widget)
         self.overlay.set_anchor(self.level_counter_widget,rx=0.99, ry=0.01, ax=1.0, ay=0.0)
 
+        # ムービーメニューウィジェット
+        self.movie_menu_widget = MovieMenuWidget(self.controller, self.voice_service, self.bus,self.config,self.save_data)
+        self.overlay.add_overlay_widget(self.movie_menu_widget)
+        self.overlay.set_anchor(self.movie_menu_widget, rx=0.1, ry=0.3, ax=0.0, ay=0.0)
+        self.movie_menu_widget.resize(0, 0)  # 最小サイズを設定
+
+        # ムービーメニューを開くボタン
+        self.movie_menu_open_button = MovieMenuOpenButtonWidget(self.controller, self.voice_service, self.movie_menu_widget, self.bus, self.config)
+        self.overlay.add_overlay_widget(self.movie_menu_open_button)
+        self.overlay.set_anchor(self.movie_menu_open_button,  rx=0.9, ry=0.12, ax=1.0, ay=0.0)
+
         # 連続記録パフォーマンスウィジェット
         self.consecutive_record_performance_widget = ConsecutiveRecordPerformanceWidget(self.controller, self.voice_service, self.bus)
         self.overlay.add_overlay_widget(self.consecutive_record_performance_widget)
         self.overlay.set_anchor(self.consecutive_record_performance_widget, rx=0.2, ry=0.7, ax=0.0, ay=0.0)
+
+        # レベルアップパフォーマンスウィジェット
+        self.level_up_performance_widget = LevelUpPerformanceWidget(self.controller, self.voice_service, self.bus)
+        self.overlay.add_overlay_widget(self.level_up_performance_widget)
+        self.overlay.set_anchor(self.level_up_performance_widget, rx=0.2, ry=0.7, ax=0.0, ay=0.0)
+
+        # ムービーアンロックリマインダーウィジェット
+        self.movie_unlocked_reminder_widget = MovieUnlockedReminderWidget(self.controller, self.voice_service, self.bus)
+        self.overlay.add_overlay_widget(self.movie_unlocked_reminder_widget)
+        self.overlay.set_anchor(self.movie_unlocked_reminder_widget, rx=0.24, ry=0.125, ax=0.0, ay=0.0)
 
         # # サンプルウィジェットの実装例1
         # self.sample_widget = SampleWidget(self.controller, self.voice_service, self.bus)
@@ -168,7 +194,8 @@ class MainWindow(QtWidgets.QMainWindow):
             self.event_debugger = EventDebuggerWidget(self.controller, self.voice_service, self.bus); v.addWidget(self.event_debugger)
             self.log = QtWidgets.QPlainTextEdit(); self.log.setReadOnly(True); v.addWidget(self.log)
             self.controller.error.connect(self.log.appendPlainText)
-        v.addStretch(1)
+        if DEBUG:
+            v.addStretch(1)
 
     def closeEvent(self, e):
         try: self.controller.stop()
