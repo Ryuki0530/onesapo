@@ -1,0 +1,82 @@
+{
+    "music_volume": {
+        "editable": true,
+        "display_name": "音量",
+        "attributes": "music",
+        "type": "int",
+        "value": 70,
+        "display_unit": "%"
+    },
+    "cheering_frequency": {
+        "editable": true,
+        "display_name": "キャラクターの応援頻度",
+        "attributes": "timer",
+        "type": "int",
+        "value": 10,
+        "display_unit": "分おき"
+    },
+    "cheering_enabled": {
+        "editable": true,
+        "display_name": "キャラクターの応援を有効にする",
+        "attributes": "timer",
+        "type": "boolean",
+        "value": true,
+        "display_unit": ""
+    },
+    "voice_volume": {
+        "editable": true,
+        "display_name": "ボイスボリューム",
+        "attributes": "global",
+        "type": "int",
+        "value": 100,
+        "display_unit": "%"
+    },
+    "username": {
+        "editable": true,
+        "display_name": "ユーザー名",
+        "attributes": "global",
+        "type": "string",
+        "value": "あなた",
+        "display_unit": ""
+    },
+    "debug_mode": {
+        "editable": false,
+        "display_name": "デバッグモード",
+        "attributes": "global",
+        "type": "boolean",
+        "value": false,
+        "display_unit": ""
+    },
+    "sleep_checker_device": {
+        "editable": true,
+        "display_name": "居眠り検知で用いるカメラデバイスの番号",
+        "attributes": "sleep_checker",
+        "type": "int",
+        "value": 0,
+        "display_unit": ""
+    },
+    "sleep_checker_interval": {
+        "editable": true,
+        "display_name": "居眠り検知の間隔",
+        "attributes": "sleep_checker",
+        "type": "int",
+        "value": 30,
+        "display_unit": "秒"
+    },
+    "window_monitor_interval": {
+        "editable": true,
+        "display_name": "ゲームウィンドウ監視の間隔",
+        "attributes": "game_process_checker",
+        "type": "int",
+        "value": 60,
+        "display_unit": "秒"
+    },
+    "external_rendering_system_path": {
+        "editable": true,
+        "display_name": "外部レンダリングシステムのパス",
+        "attributes": "game_process_checker",
+        "type": "string",
+        "value": "./unity/Unity/Unity2.exe",
+        "display_unit": ""
+    }
+}

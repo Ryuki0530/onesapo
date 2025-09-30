@@ -1,0 +1,18 @@
+{
+    "relationship": {
+        "type": "int",
+        "value": 1
+    },
+    "relationship_exp": {
+        "type": "int",
+        "value": 0
+    },
+    "consecutive_days": {
+        "type": "int",
+        "value": 0
+    },
+    "last_clear_date": {
+        "type": "string",
+        "value": ""
+    }
+}

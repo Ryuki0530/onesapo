@@ -1,0 +1,10 @@
+PySide6
+playsound
+simpleaudio
+pygame
+pydub
+numpy
+dlib
+opencv-python
+ffpyplayer
+tinytag
