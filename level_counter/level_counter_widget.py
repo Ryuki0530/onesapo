@@ -191,7 +191,7 @@ class LevelCounterWidget(QtWidgets.QWidget):
         self.event_bus.on("sleep_checker.woke_up", self.inc_work_up)
         self.event_bus.on("timer.paused", self.inc_paused)
         self.event_bus.on("timer.finished", self.timer_cleared)
-        self.event_bus.on("GAME_OVER", self.reset_counters)
+        self.event_bus.on("timer.give_up", self.give_up_process)
 
 
     """
@@ -208,6 +208,11 @@ class LevelCounterWidget(QtWidgets.QWidget):
         self.game_exit = 0
         self.work_up = 0
         self.paused = 0
+
+    def give_up_process(self,dmy):
+        print(f"[levelCounter] Give Up Process.")
+        self.reset_counters(None)
+        self.give_up_performance()
 
     def timer_cleared(self, dmy):
         self.paused = 0
@@ -285,7 +290,9 @@ class LevelCounterWidget(QtWidgets.QWidget):
         self.ctrl.smile(500)
         self.voice_service.play_async_random("シュウリョウ", 1, 4)
 
-
+    def give_up_performance(self):
+        """ギブアップ時のパフォーマンス（音声再生など）"""
+        pass  # 今のところ特に何もしない
 
     def debug_increase_wrap(self):
             print(f"[levelCounter] Debug Increase: 100")

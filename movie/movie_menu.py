@@ -69,6 +69,8 @@ class MovieMenuWidget(QtWidgets.QWidget):
         ここに、各ウィジェットのイベントを接続するコードを記述。
         """
         self.close_button.clicked.connect(self.close_menu)
+
+        self.event_bus.on("timer.give_up", self.play_give_up_movie)
     """
     ここに、各種ロジックを記述。
     """
@@ -100,6 +102,12 @@ class MovieMenuWidget(QtWidgets.QWidget):
             self.close_menu()
         else:
             self.open_menu()
+
+    def play_give_up_movie(self, dmy):
+        self.player_window = PlayerWindow()
+        self.player_window.show()
+        self.player_window.activateWindow()
+        self.player_window.load_and_play_video("assets/movies/give_up.mp4")
             
     def paintEvent(self, e):
         super().paintEvent(e)
