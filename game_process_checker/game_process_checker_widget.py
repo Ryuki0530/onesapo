@@ -74,6 +74,7 @@ class GameProcessCheckerWidget(QtWidgets.QWidget):
         self.event_bus.on("timer.paused", self._event_timer_stop)
         self.event_bus.on("timer.resumed", self._event_timer_start)
         self.event_bus.on("timer.finished", self._event_timer_stop)
+        self.event_bus.on("timer.give_up", self._event_timer_stop)
 
         print("[GameCheckerWidget] init complete")
 

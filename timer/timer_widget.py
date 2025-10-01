@@ -67,18 +67,25 @@ class TimerWidget(QtWidgets.QWidget):
         self.btn_pause.setVisible(False)
         self.btn_pause.setEnabled(False)
 
+        self.btn_giveup = QtWidgets.QPushButton()
+        self.btn_giveup.setText("あきらめる")
+        self.btn_giveup.setVisible(False)
+        self.btn_giveup.setEnabled(False)
+
+
         self.btn_resume = QtWidgets.QPushButton()
         resume_icon = QtGui.QIcon("./assets/timer/btn/resume.png")
         self.btn_resume.setIcon(resume_icon)
         self.btn_resume.setFlat(True)
         self.btn_resume.setStyleSheet("background: transparent; border: none;")
-        self.btn_resume.setIconSize(QtCore.QSize(110, 110))
+        self.btn_resume.setIconSize(QtCore.QSize(100, 100))
         self.btn_resume.setVisible(False)
         self.btn_resume.setEnabled(False)
 
-        btns = QtWidgets.QHBoxLayout(self)
+        btns = QtWidgets.QVBoxLayout(self)
         btns.addWidget(self.btn_start)
         btns.addWidget(self.btn_pause)
+        btns.addWidget(self.btn_giveup)
         btns.addWidget(self.btn_resume)
         layout.addLayout(btns)
 
@@ -92,6 +99,7 @@ class TimerWidget(QtWidgets.QWidget):
         self.btn_start.clicked.connect(self._start)
         self.btn_pause.clicked.connect(self._pause)
         self.btn_resume.clicked.connect(self._resume)
+        self.btn_giveup.clicked.connect(self._give_up)
         self.logic.finished.connect(self._on_finished)
         self.logic.tick.connect(self._on_tick)
 
@@ -109,6 +117,8 @@ class TimerWidget(QtWidgets.QWidget):
 
     def _pause(self):
         self.logic.pause()
+        self.btn_giveup.setVisible(True)
+        self.btn_giveup.setEnabled(True)
         self.btn_resume.setVisible(True)
         self.btn_resume.setEnabled(True)
         self.btn_pause.setVisible(False)
@@ -116,12 +126,28 @@ class TimerWidget(QtWidgets.QWidget):
         self.paused_counter += 1
         self.event_bus.emit("timer.paused" , count = self.paused_counter,seconds = self.logic.remaining_seconds())
 
+    def _give_up(self):
+        self.logic.stop()
+        self.btn_start.setEnabled(True)
+        self.btn_start.setVisible(True)
+        self.btn_pause.setVisible(False)
+        self.btn_pause.setEnabled(False)
+        self.btn_resume.setVisible(False)
+        self.btn_resume.setEnabled(False)
+        self.btn_giveup.setVisible(False)
+        self.btn_giveup.setEnabled(False)
+        self.event_bus.emit("timer.give_up")
+        self.label.setVisible(False)
+        self.paused_counter = 0
+
     def _resume(self):
         self.logic.resume()
         self.btn_resume.setVisible(False)
         self.btn_resume.setEnabled(False)
         self.btn_pause.setVisible(True)
         self.btn_pause.setEnabled(True)
+        self.btn_giveup.setVisible(False)
+        self.btn_giveup.setEnabled(False)
         self.event_bus.emit("timer.resumed")
 
     def _on_tick(self, remain_ms: int):
