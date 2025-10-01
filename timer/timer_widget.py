@@ -16,7 +16,7 @@ class TimerWidget(QtWidgets.QWidget):
     def __init__(self, controller, voice_service: VoiceService, event_bus, parent=None):
 
         # MTGで30分って聞いた気がするからとりあえずデフォで30分
-        self.DEFAULT_TIME = 60 *0.35
+        self.DEFAULT_TIME = 60 * 30
 
         super().__init__(parent)
         self.ctrl = controller

@@ -83,9 +83,9 @@ class MovieMenuWidget(QtWidgets.QWidget):
         if self.current_level >= 3:
             print("[MovieMenu] Unlocking movie 2")
             self.movie2.unlock_movie()
-        if self.current_level >= 4:
-            print("[MovieMenu] Unlocking movie 3")
-            self.movie3.unlock_movie()
+        # if self.current_level >= 4:
+        #     print("[MovieMenu] Unlocking movie 3")
+        #     self.movie3.unlock_movie()
 
     def open_menu(self):
         self.resize(self.widget_size[0], self.widget_size[1])

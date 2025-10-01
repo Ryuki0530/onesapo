@@ -55,7 +55,7 @@ class MovieUnlockedReminderWidget(QtWidgets.QWidget):
         elif level["level"] == 3:
             is_unlocked = True
         elif level["level"] == 4:
-            is_unlocked = True
+            is_unlocked = False
         elif level["level"] == 5:
             is_unlocked = False
         else :
