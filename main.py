@@ -123,7 +123,7 @@ class MainWindow(QtWidgets.QMainWindow):
         self.overlay.set_anchor(self.setting_menu_button, rx=0.995, ry=0.12, ax=1.0, ay=0.0)
 
         #タイマーウィジェット(Unityウィンドウ上にGUIウィジェットを表示したい場合の実装例)
-        self.timer = TimerWidget(self.controller, self.voice_service, self.bus)
+        self.timer = TimerWidget(self.controller, self.voice_service, self.bus, self.config)
         self.overlay.add_overlay_widget(self.timer)
         self.overlay.set_anchor(self.timer, rx=0.01, ry=0.775, ax=0.0, ay=0.0)
 
