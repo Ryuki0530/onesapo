@@ -6,22 +6,26 @@ QtSmooth = QtCore.Qt.TransformationMode.SmoothTransformation
 
 from .timer_logic import TimerLogic
 from sound_effects.voice_service import VoiceService
-
+from user_data_manager.config_data import ConfigData
 class TimerWidget(QtWidgets.QWidget):
     """
     見た目と配線だけ担当。
     満了時に controller.smile() → controller.lip() を呼ぶ。
     タイマーの純ロジックは別スレッド実行のため、整理のために TimerLogic に分離。
     """
-    def __init__(self, controller, voice_service: VoiceService, event_bus, parent=None):
+    def __init__(self, controller, voice_service: VoiceService, event_bus, config: ConfigData, parent=None):
 
         # MTGで30分って聞いた気がするからとりあえずデフォで30分
         self.DEFAULT_TIME = 60 * 30
 
         super().__init__(parent)
+        self.cheering_frequency_min = 100
+        self.cheering_enabled = True
+        self.next_cheering_time = None
         self.ctrl = controller
         self.voice_service = voice_service
         self.event_bus = event_bus
+        self.config: ConfigData = config
         self.logic = TimerLogic(self)
         self.paused_counter = 0
         
@@ -106,6 +110,8 @@ class TimerWidget(QtWidgets.QWidget):
     def _start(self):
         # self.logic.start(self.spin.value() * 1000)
         self.logic.start(self.DEFAULT_TIME * 1000)
+        self.cheering_enabled = self.config.get("cheering_enabled")
+        self.cheering_frequency_min = self.config.get("cheering_frequency")
         self.btn_start.setVisible(False)
         self.btn_start.setEnabled(False)
         self.btn_pause.setVisible(True)
