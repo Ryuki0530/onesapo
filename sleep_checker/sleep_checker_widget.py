@@ -12,12 +12,13 @@ QtSmooth = QtCore.Qt.TransformationMode.SmoothTransformation
 from tools.event_bus import EventBus
 from sound_effects import VoiceService
 from user_data_manager.config_data import ConfigData
+from unity.async_unity_controller import AsyncUnityController
 class SleepCheckerWidget(QtWidgets.QWidget):
 
-    def __init__(self, controller, voice_service: VoiceService, event_bus: EventBus, config: ConfigData, parent=None):
+    def __init__(self, controller: AsyncUnityController, voice_service: VoiceService, event_bus: EventBus, config: ConfigData, parent=None):
         super().__init__(parent)
         self.debug = config.get("debug_mode")
-        self.ctrl = controller
+        self.ctrl: AsyncUnityController = controller
         self.voice_service: VoiceService = voice_service
         self.event_bus = event_bus
         self.config = config
@@ -129,10 +130,14 @@ class SleepCheckerWidget(QtWidgets.QWidget):
                 payload= self.continuous_sleep_detection_count
             )
             if self.continuous_sleep_detection_count == 1:
+                self.ctrl.smile(10000)
                 self.voice_service.play_async("オキテ1")
             elif self.continuous_sleep_detection_count == 2:
+                self.ctrl.kanashi(10000)
                 self.voice_service.play_async("オキテ2")
             elif self.continuous_sleep_detection_count >= 3:
+                self.ctrl.oko(10000)
+                self.ctrl.yubifuri(10000)
                 self.voice_service.play_async("オキテ3")
 
         else:
@@ -142,7 +147,7 @@ class SleepCheckerWidget(QtWidgets.QWidget):
                     "sleep_checker.woke_up",
                     payload= self.continuous_sleep_detection_count
                 )
-                self.voice_service.play_async("オハヨウ")
+                # self.voice_service.play_async("オハヨウ")
             self.continuous_sleep_detection_count = 0
 
     def _event_timer_start(self,payload = None):

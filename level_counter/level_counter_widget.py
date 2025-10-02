@@ -18,6 +18,8 @@ from user_data_manager.config_data import ConfigData
 from user_data_manager.save_data import SaveData
 from unity.async_unity_controller import AsyncUnityController
 
+from unity.async_unity_controller import AsyncUnityController
+
 class LevelCounterWidget(QtWidgets.QWidget):
 
     def __init__(self, controller : AsyncUnityController, voice_service: VoiceService, event_bus: EventBus, config: ConfigData, save_data: SaveData, parent=None):
@@ -276,18 +278,21 @@ class LevelCounterWidget(QtWidgets.QWidget):
             
     def level_up_performance(self):
         """レベルアップ時のパフォーマンス（音声再生など）"""
-        self.ctrl.smile(500)
         voice_name = f"レベルアップ{self.friendship_level}"
+        self.ctrl.tere(5000)
+        self.ctrl.ude_gattu(5000)
         self.voice_service.play_async(voice_name)
 
     def consecutive_days_performance(self):
         """連続クリア日数のパフォーマンス（音声再生など）"""
-        self.ctrl.smile(500)
+        self.ctrl.smile(5000)
+        self.ctrl.ude_gattu(5000)
         self.voice_service.play_async_random("レンゾク", 1, 3)
 
     def normal_clear_performance(self):
         """通常クリア時のパフォーマンス（音声再生など）"""
-        self.ctrl.smile(500)
+        self.ctrl.smile(5000)
+        self.ctrl.ude_gattu(5000)
         self.voice_service.play_async_random("シュウリョウ", 1, 4)
 
     def give_up_performance(self):
