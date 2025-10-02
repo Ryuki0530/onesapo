@@ -13,12 +13,13 @@ QtSmooth = QtCore.Qt.TransformationMode.SmoothTransformation
 from tools.event_bus import EventBus
 from sound_effects import VoiceService
 from user_data_manager.config_data import ConfigData
+from unity.async_unity_controller import AsyncUnityController
 class GameProcessCheckerWidget(QtWidgets.QWidget):
 
-    def __init__(self, controller, voice_service: VoiceService, event_bus: EventBus, config: ConfigData, parent=None):
+    def __init__(self, controller : AsyncUnityController, voice_service: VoiceService, event_bus: EventBus, config: ConfigData, parent=None):
         super().__init__(parent)
         self.debug = config.get("debug_mode")
-        self.ctrl = controller
+        self.ctrl : AsyncUnityController = controller
         self.voice_service: VoiceService = voice_service
         self.event_bus = event_bus
         self.config = config
@@ -167,10 +168,15 @@ class GameProcessCheckerWidget(QtWidgets.QWidget):
             )
             if self.continuous_game_detection_count == 1:
                 self.voice_service.play_async("ゲーム1")
+                self.ctrl.kanashi(10000)
             elif self.continuous_game_detection_count == 2:
                 self.voice_service.play_async("ゲーム2")
+                self.ctrl.oko(10000)
+                self.ctrl.yubifuri(10000)
             elif self.continuous_game_detection_count >= 3:
                 self.voice_service.play_async("ゲーム3")
+                self.ctrl.oko(10000)
+                self.ctrl.yubifuri(10000)
         else:
             self.status_label.setText(f"ゲーム監視有効\nタスク情報収集中...\n[{now}]")
             if self.continuous_game_detection_count >= 3:

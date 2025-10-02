@@ -6,6 +6,7 @@ QtSmooth = QtCore.Qt.TransformationMode.SmoothTransformation
 
 from .timer_logic import TimerLogic
 from sound_effects.voice_service import VoiceService
+from unity.async_unity_controller import AsyncUnityController
 
 class TimerWidget(QtWidgets.QWidget):
     """
@@ -13,13 +14,13 @@ class TimerWidget(QtWidgets.QWidget):
     満了時に controller.smile() → controller.lip() を呼ぶ。
     タイマーの純ロジックは別スレッド実行のため、整理のために TimerLogic に分離。
     """
-    def __init__(self, controller, voice_service: VoiceService, event_bus, parent=None):
+    def __init__(self, controller: AsyncUnityController, voice_service: VoiceService, event_bus, parent=None):
 
         # MTGで30分って聞いた気がするからとりあえずデフォで30分
         self.DEFAULT_TIME = 60 * 30
 
         super().__init__(parent)
-        self.ctrl = controller
+        self.ctrl : AsyncUnityController = controller
         self.voice_service = voice_service
         self.event_bus = event_bus
         self.logic = TimerLogic(self)
@@ -111,7 +112,8 @@ class TimerWidget(QtWidgets.QWidget):
         self.btn_pause.setVisible(True)
         self.btn_pause.setEnabled(True)
         self.event_bus.emit("timer.started", seconds = self.DEFAULT_TIME)
-        self.ctrl.smile(1000)
+        self.ctrl.smile(10000)
+        self.ctrl.gattu(10000)
         self.voice_service.play_async_random("スタート", 1, 3)
         self.label.setVisible(True)
 
@@ -149,6 +151,7 @@ class TimerWidget(QtWidgets.QWidget):
         self.btn_giveup.setVisible(False)
         self.btn_giveup.setEnabled(False)
         self.event_bus.emit("timer.resumed")
+        self.ctrl.smile(5000)
 
     def _on_tick(self, remain_ms: int):
         minutes = remain_ms // 60000
