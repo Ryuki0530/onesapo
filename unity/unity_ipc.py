@@ -35,14 +35,14 @@ class UnityIPC:
     #todo: Unity変更次第、コメントアウト部は解除
     #表情
     def smile(self, ms: int = 1000):   self._send(f"SMILE {ms}")
-    # def kanashi(self, ms: int = 1000): self._send(f"KANASHI {ms}")
-    # def oko(self, ms: int = 1000):     self._send(f"OKO {ms}")
-    # def tere(self, ms: int = 1000):    self._send(f"TERE {ms}")
+    def kanashi(self, ms: int = 1000): self._send(f"KANASHI {ms}")
+    def oko(self, ms: int = 1000):     self._send(f"OKO {ms}")
+    def tere(self, ms: int = 1000):    self._send(f"TERE {ms}")
 
     #体のアニメーション
-    # def gattu(self, ms: int = 1000):    self._send(f"GATTU {ms}")
-    # def ude_gattu(self, ms: int = 1000): self._send(f"UDE_GATTU {ms}")
-    # def yubifuri(self, ms: int = 1000):  self._send(f"YUBIFURI {ms}")
+    def gattu(self, ms: int = 1000):    self._send(f"GATTU {ms}")
+    def ude_gattu(self, ms: int = 1000): self._send(f"UDE_GATTU {ms}")
+    def yubifuri(self, ms: int = 1000):  self._send(f"YUBIFURI {ms}")
 
     # def idleA(self, ms: int = 1000):   self._send(f"IDLE_A {ms}")
     # def idleB(self, ms: int = 1000):   self._send(f"IDLE_B {ms}")
@@ -52,10 +52,6 @@ class UnityIPC:
 
 
     def send_raw(self, raw: str):      self._send(raw)
-
-    #これはUnity側の変更が終わり次第削除。
-    def jitome(self, ms: int = 1000):  self._send(f"JITOME {ms}")
-    def idleB(self, ms: int = 1000):   self._send(f"IDLEB {ms}")
 
     def change_character(self, chara_name: str): self._send(f"CHANGE_CHARACTER {chara_name}")
     
